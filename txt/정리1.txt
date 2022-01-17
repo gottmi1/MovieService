@@ -29,3 +29,88 @@ useEffect(argumecnt, []); 이게 기본 모양이고, 첫 번째 인자 자리�
    console.log("나는 keyword나 counter가 변경될 때 실행돼요");
   }, [keyword, counter]);
   // dependencies는 Array기 때문에 여러개를 담을 수도 있다.
+
+  import { useState, useEffect } from "react";
+// useEffect는 2개의 argument를 갖는 함수이다. 어떤 코드를 처음 한 번만 실행하고 싶을 때 사용된다. 첫 번쨰는 처음 한 번만 실행하고 싶은 코드, 두 번째는 주시할 항목. 항목이 비어있으면 그냥 딱 한 번만 실행하고, 두 번째 argument인 배열으로 무언가를 주면 그 값이 변경됐을 때만 실행된다.
+
+이 정리에 쓰인 코드
+
+function App() {
+  const [counter, setValue] = useState(0);
+  const [keyword, setKeyword] = useState("");
+  const onClick = () => setValue((prev) => prev + 1); // 새삼스럽지만 누를 때 마다 prev에 1을 더해준 값을 counter에 세팅해준다.
+  const onChange = (e) => {
+    // 새삼스럽지만 e.target.value가 바뀔 때 마다 keyword에 해당 값을 세팅해준다.
+    setKeyword(e.target.value);
+  };
+  // console.log("전 그냥 state가 변경되면 계속 실행돼요.");
+  // state가 변경될 때 매번 실행되는 코드
+
+  useEffect(() => {
+    console.log("전 딱 한 번만 실행됨.");
+  }, []);
+  // 한 번만 실행되는 코드
+
+  useEffect(() => {
+    if (keyword.length >= 1) {
+      console.log("나는 keyword가 변경될 때 실행돼요");
+    }
+  }, [keyword]);
+  // useEffect 활용. 이 코드를 작성하기 전엔 버튼을 클릭할때도 검색됐지만 이 함수를 사용함으로써 keyword가 바뀔 때만 실행하도록 해줬다.
+  useEffect(() => {
+    if (counter !== 0) {
+      console.log("나는 counter가 변경될 때 실행돼요");
+    }
+  }, [counter]);
+
+  return (
+    <div>
+      <input
+        value={keyword}
+        onChange={onChange}
+        type="text"
+        placeholder="Search here"
+      />
+      <h1>{counter}</h1>
+      <button onClick={onClick}>click me!</button>
+    </div>
+  );
+}
+
+export default App;
+
+
+//////////////////////////////////////////////////// 이 아래는 간단한 클린업코드 코딩.
+
+import { useState, useEffect } from "react";
+// useEffect는 2개의 argument를 갖는 함수이다. 어떤 코드를 처음 한 번만 실행하고 싶을 때 사용된다. 첫 번쨰는 처음 한 번만 실행하고 싶은 코드, 두 번째는 주시할 항목. 항목이 비어있으면 그냥 딱 한 번만 실행하고, 두 번째 argument인 배열으로 무언가를 주면 그 값이 변경됐을 때만 실행된다.
+function Hello() {
+  // function byeFn() {
+  //   console.log("지워졌다");
+  // }
+  // function hiFn() {
+  //   console.log("만들어졌다");
+  //   return byeFn;
+  //   // 이렇게 해주면 만들어질 때는 hiFn을, 제거 될 떄는 byeFn을 출력. 이렇게 사라질 때 뭔가를 남기고 싶으면 retrun 값에 다른 값을 더 주면 된다. cleanUp 펑션이라고 함.
+  // }
+  useEffect(() => {
+    console.log("hi");
+    return () => console.log("bye");
+  }, []);
+  // def가 비어있지만, 한 번만 실행 한다는건 나타날떄, 제거될떄 마다 한번 실행한다는 뜻이라서 이 경우 나타날 때는 hiFn을, 지워질 때는 byeFn을 매번 출력한다.
+  // 자주 안 쓰는데 알아두면 어딘가 쓸 데가 있을지도
+  return <h1>hello</h1>;
+}
+
+function App() {
+  const [showing, setShowing] = useState(false);
+  const onClick = () => setShowing((prev) => !prev);
+  return (
+    <div>
+      {showing ? <Hello /> : null}
+      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
+    </div>
+  );
+}
+
+export default App;
