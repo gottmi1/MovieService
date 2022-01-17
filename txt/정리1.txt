@@ -1,0 +1,31 @@
+react가 편리한 점은 component단위로 새로고침하는 점이다.
+새로운 데이터가 들어올 때마다 자동으로 UI를 새로고침함.
+react는 변화가 있을 떄만 새로고침한다는 것이고 이건 아주 편리함.
+
+useEffect
+
+유즈이펙트는 코드가 실행되는데 조건을 거는 메서드이다.
+useEffect(argumecnt, []); 이게 기본 모양이고, 첫 번째 인자 자리에는 우리가 실행시키고 싶은 코드가 들어감. 두 번쨰 자리는 dependencies라는 인자의 자리인데, 여긴 업데이트의 조건이 되는 값을 react에게 알려주는 느낌.
+
+  예1)
+  useEffect(() => console.log("전 딱 한 번만 실행됨.");, []);
+  // 한 번만 실행되는 코드 dependencies가 비어 있다는 건 조건이 되는 대상이 없으니 그냥 한 번만 실행되라는 이야기.
+
+  useEffect(() => {
+    if (keyword.length >= 1) {
+      console.log("나는 keyword가 변경될 때 실행돼요");
+    }
+  }, [keyword]);
+  // 얘는 keyword값이 변경될 때 마다 실행되는 코드이고, 0 초기값이 비어있는데 그 때는 굳이 실행할 필요가 없어서 1이상의 길이를 가질 것을 조건을 줬음.
+  
+  useEffect(() => {
+    if (counter !== 0) {
+      console.log("나는 counter가 변경될 때 실행돼요");
+    }
+  }, [counter]);
+  // 얘는 counter가 변화하면 실행되는 코드, 마찬가지로 초기값때는 실행되지 않도록 함.
+
+  useEffect(() => {
+   console.log("나는 keyword나 counter가 변경될 때 실행돼요");
+  }, [keyword, counter]);
+  // dependencies는 Array기 때문에 여러개를 담을 수도 있다.
