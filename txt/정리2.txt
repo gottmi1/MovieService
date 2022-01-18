@@ -1,0 +1,51 @@
+import { useState, useEffect } from "react";
+
+function App() {
+  const [toDo, setTodo] = useState("");
+  const [toDos, setTodos] = useState([]); // 기본 값 : 빈 배열
+
+  const onChnage = (e) => setTodo(e.target.value);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (toDo === "") {
+      return; // toDo가 비어있다면, 이 함수가 작동되지 않게 끊어주기위해 바로 return;을 해줌.
+    } else {
+      setTodos((currentArray) => [toDo, ...currentArray]);
+      setTodo(""); // setTodo를 빈 값으로 불러주는 역할. input의 value를 비워주는 동작을 한다.  input value = toDo = setTodo 이어져있기 때문에 setTodo("") = toDo = "" = value = ""이 되는것
+    }
+  };
+  // console.log(toDos); // toDo의 값을 담은 문자열로 된 배열
+
+  useEffect(() => {
+    console.log(toDos);
+    console.log(toDos.map((item, index) => <li key={index}>{item}</li>)); // toDo의 값을 담은 배열을 react element로 받은 배열, toDo의 값은 props: {children: toDo} 이런식으로 들어감.
+  }, [toDos]);
+  return (
+    <div>
+      <h1>My To Do ({toDos.length})</h1>
+      <form onSubmit={onSubmit}>
+        <input
+          onChange={onChnage}
+          value={toDo}
+          type="Text"
+          placeholder="할 일을 적어"
+        />
+        <button>Add To do</button>
+      </form>
+      <hr />
+      <ul>
+        {
+          toDos.map((item, index) => (
+            <li key={index}>{item}</li> //
+          )) // map의 역할은 Array 내부의 element모두에 대해 괄호에 들어가는 함수를 한 번씩 적용해 주는 역할을 함.
+        }
+      </ul>
+    </div>
+  );
+}
+
+export default App;
+
+
+
+To Do List를 만들어봄
